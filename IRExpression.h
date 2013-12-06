@@ -40,11 +40,13 @@
 @property (nonatomic, retain) IRScope *scope;
 @property (nonatomic, retain) NSMutableArray *parameters;
 @property (nonatomic, retain) NSString *function;
-- (void *)evaluate;
+- (id)evaluate;
 // tries to evalute the expression. if it returns something, it'll be a pointer to an object or something of that nature.
 // can return either
 //
 // IRLiteral
 // IRLambda
+
+-(id)initWithBody:(NSArray *)params;
 
 @end

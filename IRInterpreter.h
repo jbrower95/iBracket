@@ -10,6 +10,7 @@
 #import "IRScope.h"
 #import "IRLiteral.h"
 #import "IRExpression.h"
+#import "IRHelper.h"
 typedef enum {IRStatusSuccess = 0, IRStatusError = 1} IRStatus;
 
 /*
@@ -50,7 +51,7 @@ typedef enum {IRStatusSuccess = 0, IRStatusError = 1} IRStatus;
 @property (nonatomic, retain) IRInterpreter *parent;
 @property (nonatomic, retain) IRScope *scope;
 
-// executeRacket:  Executes inputted code [as string] and outputs any writing or output to STDOUT.txt
+// executeRacket:  Executes inputted code [as string] and outputs any writing or output to the inputted pipe
 // if there is an error, returns IRStatusError, otherwise IRStatusSuccess
 //
 //

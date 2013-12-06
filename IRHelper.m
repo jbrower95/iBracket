@@ -10,80 +10,17 @@
 
 @implementation IRHelper
 
-/*
-+ (NSArray *)explodeByParts:(NSString *)racketExpression
-{
-    NSString *anExpression = racketExpression;
-    NSArray *seperatedParts = [anExpression componentsSeparatedByString:@" "];
-    
-    NSMutableArray *output = [[NSMutableArray alloc] init];
-    NSMutableString *currentBlock = [[NSMutableString alloc] init];
-    int insideBlock = 0;
-    int paren_count = 0;
-        
-    
-    for (NSString *part in seperatedParts)
-    {
-        if ( insideBlock == 1)
-        {
-            // we are inside of an expression
-            // append
-            if ( [part isEqualToString:@")"] || [part hasSuffix:@")"])
-            {
-                // this is an ending part
-                paren_count -= 1;
-                [currentBlock appendFormat:@"%@",part];
-                if ( paren_count == 0)
-                {
-                    insideBlock = 0;
-                    [output addObject:[currentBlock copy]];
-                    [currentBlock deleteCharactersInRange:NSMakeRange(0, [currentBlock length])];
-                }
-                    
-            }
-            else if ( [part isEqualToString:@"("] || [part hasPrefix:@"("])
-            {
-                //increase the paren_count
-                paren_count++;
-                //put a space and append this
-                [currentBlock appendFormat:@"%@",part];
-            }
-            else
-            {
-                // it's not an opening or closing part.. just append it
-                [currentBlock appendFormat:@"%@",part];
-            }
-        }
-        else
-        {
-            //we're not inside a block, check to see if we're entering one
-            if ( [part isEqualToString:@"("] || [part hasPrefix:@"("])
-            {
-                //increase the paren_count
-                paren_count++;
-                //clear the buffer and enter a block
-                [currentBlock deleteCharactersInRange:NSMakeRange(0,[currentBlock length])];
-                //start appending...
-                [currentBlock appendFormat:@"%@",part];
-                insideBlock = 1;
-            }
-            else
-            {
-                //it's just a generic expression, append it as an expression
-                [output addObject:part];
-            }
-        }
-    }
-    
-    return output;
-}*/
 
-
-+ (NSArray *)explodeByParts:(NSString *)racketExpression
++ (NSArray *)_explodeByParts:(NSString *)racketExpression
 {
     NSMutableArray *output = [[NSMutableArray alloc] init];
     
     NSMutableString *stringBuffer = [[NSMutableString alloc] init];
+    
+    //debug
+    printf("Exploding String: %s\n-----------------\n\n",[racketExpression UTF8String]);
+    
+
     
     const char *buffer = [racketExpression cStringUsingEncoding:NSASCIIStringEncoding];
     for ( int i = 0; i < strlen(buffer); i++){
@@ -94,34 +31,49 @@
             //dump the current buffer
             if ([stringBuffer length] > 0)
             {
+                printf("Adding array members: %s\n",[stringBuffer UTF8String]);
                 [output addObject:[stringBuffer copy]];
                 [stringBuffer deleteCharactersInRange:NSMakeRange(0, [stringBuffer length])];
             }
             //recursively explode the child expression
             int location = [IRHelper findMatchingParens:racketExpression startAt:i];
             NSString *substring = [racketExpression substringWithRange:NSMakeRange(i+1,location - i)];
-            [output addObject:[IRHelper explodeByParts:substring]];
+            printf("Located sub-racket expression: Range - [%d,%d]\n",i+1,location-i);
+            printf("Expression: %s\n",[substring UTF8String]);
+            [output addObject:[IRHelper _explodeByParts:substring]];
             i = location + 1;
             continue;
         }
-        if ( c == ')'){
-            //end of the expression, tail-recursive call
-            continue;
-        }
-        if ( c == ' '){
-            //skip whitespace
+        if ( c == ')' || c == ' '){
+            //whitespace or close paren indicates to empty the current buffer
+            if ([stringBuffer length] > 0)
+            {
+                printf("Emptying the current buffer: %s\n",[stringBuffer UTF8String]);
+                [output addObject:[stringBuffer copy]];
+                [stringBuffer deleteCharactersInRange:NSMakeRange(0, [stringBuffer length])];
+            }
             continue;
         }
         [stringBuffer appendFormat:@"%c",c];
-        
+        printf("Current char: %c\n",c);
+
     }
     
     return output;
     
 }
 
-// (this (is a) test)
-
++ (NSArray *)explodeByParts:(NSString *)racketExpression
+{
+    //a quick helper to get rid of initial parenthesis
+    if ([racketExpression hasPrefix:@"("]){
+        //chop off an initial open paren. this will only happen at the initial phase because of the procedure's logic
+        printf("Trimming initial brace...     ");
+        racketExpression = [racketExpression substringFromIndex:1];
+        printf("OK.\n\n");
+    }
+    return [IRHelper _explodeByParts:racketExpression];
+}
 
 
 + (int)findMatchingParens:(NSString *)input startAt:(int)start

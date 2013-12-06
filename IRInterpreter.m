@@ -18,27 +18,82 @@
     return self;
 }
 
-- (void)printStringArray:(NSArray *)input
+- (void)printStringArray:(NSArray *)input indent:(int)indent
 {
+    for (int i = 0;i < indent;i++)
+    {
+        printf("       ");
+    }
     int i = 0;
-    printf("----\n");
     for ( id a in input)
     {
         if ( [a isKindOfClass:[NSString class]]){
             printf("array[%d] = %s\n",i,[a UTF8String]);
         }
         if ( [a isKindOfClass:[NSMutableArray class]] || [a isKindOfClass:[NSArray class]]){
-            printf("(subarray)\n");
-            [self printStringArray:a];
-            printf("(subarray end)\n");
+            [self printStringArray:a indent:(indent + 1)];
         }
         i++;
     }
-    printf("----\n");
+}
+
+- (void)printArray:(NSArray *)input
+{
+    [self printStringArray:input indent:0];
 }
 
 
+
 - (IRStatus)executeRacket:(NSString *)code output:(NSPipe *)pipe
+{
+    printf("IRInterpreter Starting Up... version %.2f\n-----------------------------\n",IR_VERSION);
+    
+    _output = [pipe fileHandleForWriting];
+    NSFileHandle *output = [pipe fileHandleForWriting];
+    [_output retain];
+
+    //check to see that the code has valid parentheses
+    
+    BOOL success = [IRHelper isParensValid:code];
+    
+    
+    if ( !success )
+    {
+        [output writeData:[@"Error: Number of opening brackets inconsistent with number of closing brackets. Check your syntax, fool." dataUsingEncoding:NSUTF8StringEncoding]];
+        
+        printf("\n===========\nCode failed initial test\n==============\n\n");
+        
+        return IRStatusError;
+    }
+
+    
+    
+    printf("Checking scope... ");
+    if ( self.scope )
+    {
+        printf("OK (0)\n");
+        
+    }
+    else{
+        printf("\n  Re-initializing... \n");
+        self.scope = [[IRScope alloc] initWithParent:nil];
+        printf("OK (0)\n");
+    }
+    
+    // begin parsing
+    NSArray *parts = [IRHelper explodeByParts:code];
+    
+    IRExpression *expression = [[IRExpression alloc] initWithBody:parts];
+    [expression setScope:self.scope];
+    [expression evaluate];
+    
+    
+    
+    
+    return IRStatusSuccess;
+}
+
+- (IRStatus)executeRacketOld:(NSString *)code output:(NSPipe *)pipe
 {
     
     
@@ -56,7 +111,7 @@
     // a couple of tests:
     
     
-    [self printStringArray:[self explodeByParts:@"if (this (is a) test) (do this) (or this)"]];
+    [self printArray:[self explodeByParts:@"(if (> 5 4) 4 5)"]];
     return IRStatusSuccess;
     
     

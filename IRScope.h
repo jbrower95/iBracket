@@ -23,12 +23,16 @@
     
     //represents the parent of this IRScope.
     IRScope *parent;
+    
+    //stdout
+    NSPipe *outpipe;
+    
 }
 @property (nonatomic, retain) IRScope *parent;
 @property (nonatomic, retain) NSMutableArray *children;
 @property (nonatomic, retain) NSMutableDictionary *definitions;
 @property (nonatomic, retain) NSMutableArray *expressions;
-
+@property (nonatomic, retain) NSPipe *outpipe;
 
 
 

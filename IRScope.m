@@ -86,7 +86,7 @@
 //takes an identifier string and returns an associated variable
 - (id)variableLookup:(NSString *)identifier
 {
-    printf("Scope -------- Looking up symbol '%s'",[identifier UTF8String]);
+    printf("Scope -------- Looking up symbol '%s'\n",[identifier UTF8String]);
     //check the current namespace
     if ([[definitions allKeys] containsObject:identifier])
     {

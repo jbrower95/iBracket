@@ -30,6 +30,7 @@
 		D0CC9D84184FD1B500F2ABF0 /* Main_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D0CC9D83184FD1B500F2ABF0 /* Main_iPhone.storyboard */; };
 		D0CC9D87184FD1C000F2ABF0 /* FirstViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D0CC9D86184FD1C000F2ABF0 /* FirstViewController.m */; };
 		D0CC9D8A184FD1CF00F2ABF0 /* SecondViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D0CC9D89184FD1CF00F2ABF0 /* SecondViewController.m */; };
+		D0CC9D8E18513BE000F2ABF0 /* IRPrimitiveLambda.m in Sources */ = {isa = PBXBuildFile; fileRef = D0CC9D8D18513BE000F2ABF0 /* IRPrimitiveLambda.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -79,6 +80,9 @@
 		D0CC9D86184FD1C000F2ABF0 /* FirstViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FirstViewController.m; sourceTree = "<group>"; };
 		D0CC9D88184FD1CF00F2ABF0 /* SecondViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SecondViewController.h; sourceTree = "<group>"; };
 		D0CC9D89184FD1CF00F2ABF0 /* SecondViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SecondViewController.m; sourceTree = "<group>"; };
+		D0CC9D8B18513B4700F2ABF0 /* racket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = racket.h; sourceTree = "<group>"; };
+		D0CC9D8C18513BE000F2ABF0 /* IRPrimitiveLambda.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IRPrimitiveLambda.h; sourceTree = "<group>"; };
+		D0CC9D8D18513BE000F2ABF0 /* IRPrimitiveLambda.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IRPrimitiveLambda.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,12 +112,15 @@
 		D0CC9D2D184FD17300F2ABF0 = {
 			isa = PBXGroup;
 			children = (
+				D0CC9D8B18513B4700F2ABF0 /* racket.h */,
 				D0CC9D71184FD18E00F2ABF0 /* IRExpression.h */,
 				D0CC9D72184FD18E00F2ABF0 /* IRExpression.m */,
 				D0CC9D73184FD18E00F2ABF0 /* IRInterpreter.h */,
 				D0CC9D74184FD18E00F2ABF0 /* IRInterpreter.m */,
 				D0CC9D75184FD18E00F2ABF0 /* IRLambda.h */,
 				D0CC9D76184FD18E00F2ABF0 /* IRLambda.m */,
+				D0CC9D8C18513BE000F2ABF0 /* IRPrimitiveLambda.h */,
+				D0CC9D8D18513BE000F2ABF0 /* IRPrimitiveLambda.m */,
 				D0CC9D77184FD18E00F2ABF0 /* IRLiteral.h */,
 				D0CC9D78184FD18E00F2ABF0 /* IRLiteral.m */,
 				D0CC9D79184FD18E00F2ABF0 /* IRScope.h */,
@@ -296,6 +303,7 @@
 				D0CC9D7D184FD18E00F2ABF0 /* IRExpression.m in Sources */,
 				D0CC9D81184FD18E00F2ABF0 /* IRScope.m in Sources */,
 				D0CC9D7E184FD18E00F2ABF0 /* IRInterpreter.m in Sources */,
+				D0CC9D8E18513BE000F2ABF0 /* IRPrimitiveLambda.m in Sources */,
 				D0CC9D53184FD17400F2ABF0 /* ViewController.m in Sources */,
 				D0CC9D7F184FD18E00F2ABF0 /* IRLambda.m in Sources */,
 				D0CC9D82184FD18E00F2ABF0 /* IRHelper.m in Sources */,

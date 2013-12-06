@@ -30,9 +30,9 @@
     [[pipe fileHandleForReading] waitForDataInBackgroundAndNotify];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(outputReceived:) name:NSFileHandleDataAvailableNotification object:[pipe fileHandleForReading]];
     
-    NSArray *parts = [IRHelper explodeByParts:@"(if (test method here) x y (test again) z)"];
+    NSArray *parts = [IRHelper explodeByParts:@"(let ((x 15) (y 20)) (+ x y))"];
     
-    [self printStringArray:parts];
+    [self printArray:parts];
     
     
    // [interpreter executeRacket:code output:pipe];
@@ -51,24 +51,32 @@
     
 }
 
-- (void)printStringArray:(NSArray *)_input
+- (void)printStringArray:(NSArray *)input indent:(int)indent
 {
+
     int i = 0;
-    printf("----\n");
-    for ( id a in _input)
+    for ( id a in input)
     {
         if ( [a isKindOfClass:[NSString class]]){
+            for (int i = 0;i < indent;i++)
+            {
+                printf("       ");
+            }
             printf("array[%d] = %s\n",i,[a UTF8String]);
         }
         if ( [a isKindOfClass:[NSMutableArray class]] || [a isKindOfClass:[NSArray class]]){
-            printf("(subarray)\n");
-            [self printStringArray:a];
-            printf("(subarray end)\n");
+            [self printStringArray:a indent:(indent + 1)];
         }
         i++;
     }
-    printf("----\n");
 }
+
+- (void)printArray:(NSArray *)input
+{
+    NSLog(@"%@",input);
+    [self printStringArray:input indent:0];
+}
+
 
 - (void)outputReceived:(NSNotification *)notification
 {

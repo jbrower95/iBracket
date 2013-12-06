@@ -11,6 +11,33 @@
 @implementation IRExpression
 @synthesize scope, function, parameters;
 
+- (id)initWithBody:(NSArray *)params scope:(IRScope *)scope
+{
+    id f = [params objectAtIndex:0];
+    
+    if ( [f isKindOfClass:[NSArray class]] || [f isKindOfClass:[NSMutableArray class]] ){
+        //compound function type...
+        IRExpression *subExpression = [[IRExpression alloc] initWithBody:f scope:scope];
+        id output = [subExpression evaluate];
+        if ([output isKindOfClass:[IRLambda class]])
+        {
+            //form a lambda expression
+        }
+            
+    }
+    else if ([f isKindOfClass:[NSString class]]){
+        //regular function
+        self.function = [f copy];
+    }
+    else{
+        //throw an error
+              
+    }
+    
+    
+    return self;
+}
+
 - (IRLiteral *)evaluate
 {
     //the first step to evaluating an expression is to evaluate its params/components.
